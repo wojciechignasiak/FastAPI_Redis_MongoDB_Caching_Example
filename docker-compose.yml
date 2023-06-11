@@ -1,0 +1,68 @@
+version: '3'
+
+networks:
+  backend-network:
+    name: backend-network
+    driver: bridge
+
+volumes:
+  mongo-volume:
+
+services:
+######################FastAPI SERVICES - Beginning###########################
+
+  fastapi-app:
+    container_name: fastapi-app
+    build: ./fastapi-app
+    image: ghcr.io/wojciechignasiak/fastapi-app:0.0.1
+    environment:
+      - MONGO_DB=${MONGO_DB}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_USERNAME=${MONGO_USERNAME}
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_COLLECTION=${MONGO_COLLECTION}
+    ports:
+      - 8081:80
+    expose:
+      - 80
+    networks:
+      - backend-network
+    volumes:
+      - ./fastapi-app:/usr/src/fastapi-app/
+    depends_on:
+      - mongo
+######################FastAPI SERVICES - End###########################
+
+######################MongoDB - Beginning###########################
+
+  mongo:
+    container_name: mongo
+    image: mongo:7.0.0-rc3-jammy
+    restart: always
+    ports:
+      - "27017:27017"
+    expose:
+      - 27017
+    networks:
+      - backend-network
+    volumes:
+      - mongo-volume:/data/db
+      - mongo-volume:/data/configdb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+
+######################MongoDB - End###########################
+
+######################Redis - Beginning###########################
+  redis:
+    image: redis:7.2-rc2-alpine
+    command: redis-server --requirepass redis
+    ports:
+      - "6379:6379"
+    expose:
+      - 6379
+    networks:
+      - backend-network
+######################Redis - End###########################
