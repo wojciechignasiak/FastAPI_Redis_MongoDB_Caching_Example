@@ -1,4 +1,5 @@
 from app.models.software_developer import SoftwareDeveloperModel, SoftwareDeveloperAttributes
+from fastapi import HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorCollection
 from pymongo.results import InsertOneResult
 
@@ -12,8 +13,7 @@ async def create_software_developer_query(mongo_collection: AsyncIOMotorCollecti
             SoftwareDeveloperAttributes.years_of_experience: software_developer.years_of_experience
         }
         new_software_developer: InsertOneResult = await mongo_collection.insert_one(software_developer_dict)
-        # software_developer._id = new_software_developer.inserted_id
         software_developer.id = str(new_software_developer.inserted_id)
         return software_developer
     except Exception as e:
-        print({"create_software_developer_query": f"Error: {e}"})
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str({"create_software_developer_query": f"Error: {e}"}))

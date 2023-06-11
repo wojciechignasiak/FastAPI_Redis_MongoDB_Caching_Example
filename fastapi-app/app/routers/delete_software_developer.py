@@ -20,4 +20,4 @@ async def delete_software_developer_handler(software_developer_id: str, mongo_cl
         else:
             return JSONResponse( status_code=status.HTTP_200_OK,content=f"Software Developer with id: {software_developer_id} deleted successfully")
     except HTTPException as e:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Error: {e}")
+        raise e

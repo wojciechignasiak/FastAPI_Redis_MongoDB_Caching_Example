@@ -1,5 +1,6 @@
 from app.models.software_developer import UpdateSoftwareDeveloperModel, SoftwareDeveloperAttributes, SoftwareDeveloperModel
 from motor.motor_asyncio import AsyncIOMotorCollection
+from fastapi import HTTPException, status
 from bson.objectid import ObjectId
 
 async def update_software_developer_query(mongo_collection: AsyncIOMotorCollection, software_developer_id: str, update_software_developer: UpdateSoftwareDeveloperModel):
@@ -12,7 +13,6 @@ async def update_software_developer_query(mongo_collection: AsyncIOMotorCollecti
         }
         updated_software_developer = await mongo_collection.find_one_and_update({SoftwareDeveloperAttributes.mongo_id: ObjectId(software_developer_id)}, {"$set": software_developer_document})
         updated_software_developer[SoftwareDeveloperAttributes.mongo_id] = str(updated_software_developer[SoftwareDeveloperAttributes.mongo_id])
-        print(updated_software_developer)
         return SoftwareDeveloperModel.parse_obj(updated_software_developer)
     except Exception as e:
-        print({"update_software_developer_query": f"Error: {e}"})
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str({"update_software_developer_query": f"Error: {e}"}))
