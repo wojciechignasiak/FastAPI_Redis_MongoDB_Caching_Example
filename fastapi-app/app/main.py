@@ -3,10 +3,12 @@ import os
 import asyncio
 import motor.motor_asyncio
 from pymongo.errors import ConnectionFailure
+import redis
 from app.routers import (
     create_software_developer,
     delete_software_developer,
-    update_software_developer
+    update_software_developer,
+    get_software_developer
 )
 MONGO_USERNAME = os.environ.get("MONGO_USERNAME")
 MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD")
@@ -18,6 +20,7 @@ def create_application() -> FastAPI:
     application.include_router(create_software_developer.router, prefix="/fastapi-app", tags=["fastapi-app"])
     application.include_router(delete_software_developer.router, prefix="/fastapi-app", tags=["fastapi-app"])
     application.include_router(update_software_developer.router, prefix="/fastapi-app", tags=["fastapi-app"])
+    application.include_router(get_software_developer.router, prefix="/fastapi-app", tags=["fastapi-app"])
     return application
 
 app = create_application()
@@ -33,8 +36,8 @@ async def startup_event():
     while True:
         try:
             print("Testing connection to MongoDB...")
-            server_info = await app.state.mongo_client.server_info()
-            if server_info["ok"] == 1.0:
+            mongo_info = await app.state.mongo_client.server_info()
+            if mongo_info["ok"] == 1.0:
                 print("Connection to MongoDB status: Connected")
             else:
                 print("Connection to MongoDB status: Failed. Retrying...")
@@ -42,6 +45,21 @@ async def startup_event():
             break
         except ConnectionFailure:
             await asyncio.sleep(3)
+
+    app.state.redis_client: redis.Redis = redis.Redis(host="redis", port=6379, password="redis")
+    while True:
+        try:
+            print("Testing connection to Redis...")
+            redis_info = app.state.redis_client.ping()
+            if redis_info:
+                print('Connection to Redis status: Connected')
+            else:
+                print('Connection to Redis status: Failed. Retrying...')
+                raise ConnectionError
+            break
+        except ConnectionError:
+            await asyncio.sleep(3)
+
 
 @app.on_event("shutdown")
 async def shutdown_event():

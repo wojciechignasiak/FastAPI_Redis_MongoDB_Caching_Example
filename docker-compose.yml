@@ -58,7 +58,7 @@ services:
 ######################Redis - Beginning###########################
   redis:
     image: redis:7.2-rc2-alpine
-    command: redis-server --requirepass redis
+    command: ["redis-server", "--save", "\"\"", "--appendonly", "no", "--requirepass", "redis"]
     ports:
       - "6379:6379"
     expose:

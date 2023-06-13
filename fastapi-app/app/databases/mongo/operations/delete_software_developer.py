@@ -7,10 +7,10 @@ from pymongo.results import DeleteResult
 
 
 
-async def delete_software_developer_query(collection: AsyncIOMotorCollection, software_developer_id: str) -> bool:
+async def delete_software_developer_query(mongo_collection: AsyncIOMotorCollection, software_developer_id: str) -> bool:
     try:
-        result: DeleteResult = await collection.delete_one({SoftwareDeveloperAttributes.mongo_id: ObjectId(software_developer_id)})
-        if result.acknowledged == True:
+        result: DeleteResult = await mongo_collection.delete_one({SoftwareDeveloperAttributes.mongo_id: ObjectId(software_developer_id)})
+        if result.deleted_count == 1:
             return True
         else:
             return False
