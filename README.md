@@ -1,3 +1,5 @@
-# FastAPI_RabbitMQ_Consumer
+# FastAPI_Redis_MongoDB_Caching_Example
 
-Template of containerized FastAPI application with RabbitMQ Consumer not blocking each other due to concurrency.
+This repository presents how to use and how to organize:
+* Folder structure of FastAPI application
+* How to cache data with Redis and save data to MongoDB
