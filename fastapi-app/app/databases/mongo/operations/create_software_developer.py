@@ -4,7 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorCollection
 from pymongo.results import InsertOneResult
 
 
-async def create_software_developer_query(mongo_collection: AsyncIOMotorCollection, software_developer: SoftwareDeveloperModel):
+async def create_software_developer_query(mongo_collection: AsyncIOMotorCollection, software_developer: SoftwareDeveloperModel) -> SoftwareDeveloperModel:
     try:
         software_developer_dict: dict = {
             SoftwareDeveloperAttributes.full_name: software_developer.full_name,

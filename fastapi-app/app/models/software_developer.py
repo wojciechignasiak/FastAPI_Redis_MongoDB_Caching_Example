@@ -42,3 +42,4 @@ class SoftwareDeveloperAttributes(str, Enum):
     email = 'email'
     favourite_programming_language = 'favourite_programming_language'
     years_of_experience = 'years_of_experience'
+    software_developer = 'software_developer'

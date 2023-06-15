@@ -22,6 +22,9 @@ services:
       - MONGO_HOST=${MONGO_HOST}
       - MONGO_PORT=${MONGO_PORT}
       - MONGO_COLLECTION=${MONGO_COLLECTION}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
     ports:
       - 8081:80
     expose:
@@ -57,6 +60,7 @@ services:
 
 ######################Redis - Beginning###########################
   redis:
+    container_name: redis
     image: redis:7.2-rc2-alpine
     command: ["redis-server", "--save", "\"\"", "--appendonly", "no", "--requirepass", "redis"]
     ports:

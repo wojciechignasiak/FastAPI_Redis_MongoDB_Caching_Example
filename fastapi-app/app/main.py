@@ -14,6 +14,9 @@ MONGO_USERNAME = os.environ.get("MONGO_USERNAME")
 MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD")
 MONGO_HOST = os.environ.get("MONGO_HOST")
 MONGO_PORT = os.environ.get("MONGO_PORT")
+REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD")
+REDIS_HOST = os.environ.get("REDIS_HOST")
+REDIS_PORT = os.environ.get("REDIS_PORT")
 
 def create_application() -> FastAPI:
     application = FastAPI(openapi_url="/fastapi-app/openapi.json", docs_url="/fastapi-app/docs")
@@ -46,7 +49,7 @@ async def startup_event():
         except ConnectionFailure:
             await asyncio.sleep(3)
 
-    app.state.redis_client: redis.Redis = redis.Redis(host="redis", port=6379, password="redis")
+    app.state.redis_client: redis.Redis = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
     while True:
         try:
             print("Testing connection to Redis...")
