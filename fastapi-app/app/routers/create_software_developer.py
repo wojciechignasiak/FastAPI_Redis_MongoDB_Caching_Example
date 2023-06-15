@@ -8,6 +8,7 @@ from app.databases.mongo.connection.get_mongo_client import get_mongo_client
 from app.databases.mongo.connection.get_database_and_collection import get_database_and_collection
 from app.databases.redis.connection.get_redis_client import get_redis_client
 from app.databases.redis.operations.create_or_update_software_developer import create_or_update_software_developer_cache
+from app.databases.redis.operations.delete_software_developer import delete_software_developer_cache
 import redis
 
 router = APIRouter()
@@ -19,7 +20,11 @@ async def create_software_developer_handler(software_developer: SoftwareDevelope
     try:
         mongo_database_and_collection = await get_database_and_collection(mongo_client)
         created_software_developer: SoftwareDeveloperModel = await create_software_developer_query(mongo_database_and_collection, software_developer)
-        await create_or_update_software_developer_cache(redis_client, created_software_developer)
-        return JSONResponse(status_code=status.HTTP_200_OK,content=jsonable_encoder(created_software_developer) )
+        cache_result = await create_or_update_software_developer_cache(redis_client, created_software_developer)
+        if cache_result == True:
+            return JSONResponse(status_code=status.HTTP_200_OK,content=jsonable_encoder(created_software_developer))
+        else:
+            await delete_software_developer_cache(redis_client, created_software_developer.id)
+            return JSONResponse(status_code=status.HTTP_200_OK,content=jsonable_encoder(created_software_developer))
     except HTTPException as e:
         raise e
