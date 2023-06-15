@@ -1,9 +1,6 @@
 from app.models.software_developer import SoftwareDeveloperAttributes
-from fastapi.encoders import jsonable_encoder
 from fastapi import HTTPException, status
 import redis
-
-
 
 
 async def delete_software_developer_cache(redis_client: redis.Redis, software_developer_id: str):
