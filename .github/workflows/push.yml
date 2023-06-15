@@ -1,11 +1,11 @@
-name: Docker Compose Actions Workflow
+name: Docker-Compose and unit testing
 on: push
 jobs:
-  test:
+  Docker-Compose-up-and-run-pytest:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build the stack
+      - name: Build Docker containers
         run: docker-compose up -d
-      - name: Test
-        run: docker-compose exec -it fastapi-app python -m pytest
+      - name: Run unit tests
+        run: docker-compose exec -T fastapi-app python -m pytest
