@@ -1,13 +1,15 @@
 import pytest
+import pytest_asyncio
 import os
 from fastapi.testclient import TestClient
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase, AsyncIOMotorCollection
 from app.main import app
 import redis
 
-@pytest.fixture(scope="module")
-def mongo_collection():
-    
+
+
+@pytest_asyncio.fixture
+async def mongo_collection():
     MONGO_USERNAME = os.environ.get("MONGO_USERNAME")
     MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD")
     MONGO_HOST = os.environ.get("MONGO_HOST")
