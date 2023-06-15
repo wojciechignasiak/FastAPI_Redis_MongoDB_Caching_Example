@@ -40,7 +40,7 @@ async def mongo_collection():
     mongo_client.close()
 
 
-@pytest.fixture(scope="module")
+@pytest_asyncio.fixture
 def redis_client():
     REDIS_HOST = os.environ.get("REDIS_HOST")
     REDIS_PORT = os.environ.get("REDIS_PORT")
