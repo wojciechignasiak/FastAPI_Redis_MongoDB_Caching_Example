@@ -5,9 +5,9 @@
 This repository is a guide on how to implement data caching using the Write-Through technique, utilizing FastAPI, Redis, and MongoDB. It demonstrates how to apply the Write-Through caching technique in a FastAPI application to enhance application performance and scalability.
 
 <br>
-<center>
+<p align="center">
 <img src="images/diagram.png" alt="Project diagram"/>
-</center>
+</p>
 <br>
 
 ## Technologies
