@@ -29,11 +29,10 @@ This should install all dependencies, configure, and run the FastAPI, Redis, and
 Upon running, you can see the interactive FastAPI documentation by navigating to http://localhost:8081/fastapi-app/docs
 
 ## Example endpoints:
-
-* $${\color{green}$POST}$ **/fastapi-app/create-software-developer**: add a new item.
-* $${\color{blue}$GET}$ **/fastapi-app/get-software-developer**: fetch item details.
-* $${\color{orange}$PATCH}$ **/fastapi-app/update-software-developer**: update item.
-* $${\color{red}$DELETE}$ **/fastapi-app/delete-software-developer**: delete item.
+* $${\color{green}POST}$$ **/fastapi-app/create-software-developer**: add a new item.
+* $${\color{blue}GET}$$ **/fastapi-app/get-software-developer**: fetch item details.
+* $${\color{orange}PATCH}$$ **/fastapi-app/update-software-developer**: update item.
+* $${\color{red}DELETE}$$ **/fastapi-app/delete-software-developer**: delete item.
 
 
 ## Description of Write-Through Caching Technique
