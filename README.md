@@ -1,5 +1,41 @@
 # FastAPI_Redis_MongoDB_Caching_Example
 
-This repository presents how to use and how to organize:
-* Folder structure of FastAPI application
-* How to cache data with Redis and save data to MongoDB
+![example event parameter](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?event=push)
+
+This repository is a guide on how to implement data caching using the Write-Through technique, utilizing FastAPI, Redis, and MongoDB. It demonstrates how to apply the Write-Through caching technique in a FastAPI application to enhance application performance and scalability.
+
+<br>
+<img src="images/diagram.png" alt="Project diagram"/>
+<br>
+
+## Technologies
+
+* FastAPI
+* Redis
+* MongoDB
+
+## Running
+
+Assuming you already have Docker and docker-compose installed, execute the following command in the root directory of the project:
+
+`docker-compose up -d`
+
+This should install all dependencies, configure, and run the FastAPI, Redis, and MongoDB containers.
+
+## Example Usage
+
+Upon running, you can see the interactive FastAPI documentation by navigating to http://localhost:8081/fastapi-app/docs
+
+## Example endpoints:
+
+* <span style="color:green">POST</span> **/fastapi-app/create-software-developer**: add a new item.
+* <span style="color:blue">GET</span> **/fastapi-app/get-software-developer**: fetch item details.
+* <span style="color:orange">PATCH</span> **/fastapi-app/update-software-developer**: update item.
+* <span style="color:red">DELETE</span> **/fastapi-app/delete-software-developer**: delete item.
+
+
+## Description of Write-Through Caching Technique
+
+The Write-Through caching technique involves writing data to both the cache and the primary database simultaneously. When the application writes new data, this data is written to Redis (cache) and MongoDB (primary database) at the same time.
+
+This ensures data consistency between the cache and the primary database and enables fast data reading from the cache, significantly improving application performance.
