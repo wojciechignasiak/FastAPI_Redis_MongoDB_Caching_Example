@@ -30,10 +30,10 @@ Upon running, you can see the interactive FastAPI documentation by navigating to
 
 ## Example endpoints:
 
-* <span style="color:green">POST</span> **/fastapi-app/create-software-developer**: add a new item.
-* <span style="color:blue">GET</span> **/fastapi-app/get-software-developer**: fetch item details.
-* <span style="color:orange">PATCH</span> **/fastapi-app/update-software-developer**: update item.
-* <span style="color:red">DELETE</span> **/fastapi-app/delete-software-developer**: delete item.
+* $${\color{green}$POST}$ **/fastapi-app/create-software-developer**: add a new item.
+* $${\color{blue}$GET}$ **/fastapi-app/get-software-developer**: fetch item details.
+* $${\color{orange}$PATCH}$ **/fastapi-app/update-software-developer**: update item.
+* $${\color{red}$DELETE}$ **/fastapi-app/delete-software-developer**: delete item.
 
 
 ## Description of Write-Through Caching Technique
