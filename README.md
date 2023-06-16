@@ -1,11 +1,13 @@
 # FastAPI_Redis_MongoDB_Caching_Example
 
-![example event parameter](https://github.com/github/docs/actions/workflows/main.yml/badge.svg?event=push)
+![Tests](https://github.com/wojciechignasiak/FastAPI_Redis_MongoDB_Caching_Example/actions/workflows/push.yml/badge.svg?event=push)
 
 This repository is a guide on how to implement data caching using the Write-Through technique, utilizing FastAPI, Redis, and MongoDB. It demonstrates how to apply the Write-Through caching technique in a FastAPI application to enhance application performance and scalability.
 
 <br>
+<center>
 <img src="images/diagram.png" alt="Project diagram"/>
+</center>
 <br>
 
 ## Technologies
