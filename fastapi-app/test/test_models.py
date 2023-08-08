@@ -1,12 +1,12 @@
 from app.models.software_developer import SoftwareDeveloperModel, UpdateSoftwareDeveloperModel, SoftwareDeveloperAttributes
 
 def test_software_developer_model():
-    software_developer = SoftwareDeveloperModel(full_name="Wojciech Ignasiak",
+    software_developer = SoftwareDeveloperModel(id="abc",
+                                                full_name="Wojciech Ignasiak",
                                                 email="wojciech_ignasiak@icloud.com",
                                                 favourite_programming_language="Python",
                                                 years_of_experience=1
     )
-    software_developer.id = "abc"
 
     assert software_developer.id == "abc"
     assert software_developer.full_name == "Wojciech Ignasiak"

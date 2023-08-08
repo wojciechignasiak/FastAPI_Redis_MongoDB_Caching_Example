@@ -11,8 +11,7 @@ async def get_software_developer_query(mongo_collection: AsyncIOMotorCollection,
         if software_developer is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str({"get_software_developer_query": f"Software developer with id {software_developer_id} not found"}))
         else:
-            software_developer[SoftwareDeveloperAttributes.mongo_id] = str(software_developer[SoftwareDeveloperAttributes.mongo_id])
-            return SoftwareDeveloperModel.parse_obj(software_developer)
+            return SoftwareDeveloperModel.model_validate(software_developer)
     except HTTPException as e:
         raise e
     except Exception as e:

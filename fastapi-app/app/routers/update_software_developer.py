@@ -9,7 +9,6 @@ from app.databases.mongo.connection.get_database_and_collection import get_datab
 from app.databases.redis.connection.get_redis_client import get_redis_client
 from app.databases.redis.operations.create_or_update_software_developer import create_or_update_software_developer_cache
 import redis
-import json
 router = APIRouter()
 
 @router.patch("/update-software-developer", response_description="Update Software Developer")

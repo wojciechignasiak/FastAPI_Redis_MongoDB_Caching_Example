@@ -1,5 +1,5 @@
 import pytest
-from app.models.software_developer import SoftwareDeveloperModel, UpdateSoftwareDeveloperModel
+from app.models.software_developer import SoftwareDeveloperModel, UpdateSoftwareDeveloperModel, CreateSoftwareDeveloperModel
 from app.databases.mongo.operations.create_software_developer import create_software_developer_query
 from app.databases.mongo.operations.get_software_developer import get_software_developer_query
 from app.databases.mongo.operations.update_software_developer import update_software_developer_query
@@ -8,7 +8,7 @@ from app.databases.mongo.operations.delete_software_developer import delete_soft
 
 @pytest.mark.asyncio
 async def test_create_software_developer_query(mongo_collection):
-    software_developer = SoftwareDeveloperModel(full_name="Wojciech Ignasiak",
+    software_developer = CreateSoftwareDeveloperModel(full_name="Wojciech Ignasiak",
                                                 email="wojciech_ignasiak@outlook.com",
                                                 favourite_programming_language="Python",
                                                 years_of_experience=1)
@@ -19,20 +19,22 @@ async def test_create_software_developer_query(mongo_collection):
 
 @pytest.mark.asyncio
 async def test_get_software_developer_query(mongo_collection):
-    software_developer = SoftwareDeveloperModel(full_name="Wojciech Ignasiak",
+    software_developer = CreateSoftwareDeveloperModel(full_name="Wojciech Ignasiak",
                                                 email="wojciech_ignasiak@icloud.com",
                                                 favourite_programming_language="Python",
                                                 years_of_experience=1)
     created_software_developer: SoftwareDeveloperModel = await create_software_developer_query(mongo_collection, software_developer)
+    print(created_software_developer.id)
     assert created_software_developer.id is not None
 
     retrieved_software_developer: SoftwareDeveloperModel = await get_software_developer_query(mongo_collection, created_software_developer.id)
+    print(retrieved_software_developer)
     assert retrieved_software_developer.id == created_software_developer.id
 
 
 @pytest.mark.asyncio
 async def test_update_software_developer_query(mongo_collection):
-    software_developer = SoftwareDeveloperModel(full_name="Wojciech Ignasiak",
+    software_developer = CreateSoftwareDeveloperModel(full_name="Wojciech Ignasiak",
                                                 email="wojciech_ignasiak@icloud.com",
                                                 favourite_programming_language="Python",
                                                 years_of_experience=1)
@@ -51,7 +53,7 @@ async def test_update_software_developer_query(mongo_collection):
 
 @pytest.mark.asyncio
 async def test_delete_software_developer_query(mongo_collection):
-    software_developer = SoftwareDeveloperModel(full_name="Wojciech Ignasiak",
+    software_developer = CreateSoftwareDeveloperModel(full_name="Wojciech Ignasiak",
                                                 email="wojciech_ignasiak@icloud.com",
                                                 favourite_programming_language="Python",
                                                 years_of_experience=1)

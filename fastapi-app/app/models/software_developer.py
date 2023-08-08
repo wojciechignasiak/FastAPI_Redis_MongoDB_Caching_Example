@@ -1,39 +1,64 @@
-from pydantic import BaseModel, Field, EmailStr
-from typing import Optional
+from pydantic import BaseModel, Field, EmailStr, ConfigDict
+from typing import Any, Optional
 from enum import Enum
 
+
 class SoftwareDeveloperModel(BaseModel):
-    id: Optional[str] = Field(None, alias='_id')
+    model_config = ConfigDict(json_schema_extra={
+        "example":{
+                "id": "648b737eff5189b6b6ad9a86",
+                "full_name": "Wojciech Ignasiak",
+                "email": "wojciech_ignasiak@outlook.com",
+                "favourite_programming_language": "Python",
+                "years_of_experience": 1
+                }
+            }
+        )
+    
+    id: str = Field(...)
     full_name: str = Field(...)
     email: EmailStr = Field(...)
     favourite_programming_language: str = Field(...)
     years_of_experience: int = Field(...)
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "full_name": "Wojciech Ignasiak",
-                "email": "wojciech_ignasiak@icloud.com",
-                "favourite_programming_language": "Python",
-                "years_of_experience": 1,
-            }
-        }
+    @classmethod
+    def model_validate(cls, data: dict) -> "SoftwareDeveloperModel":
+        if '_id' in data:
+            data['id'] = str(data.pop('_id'))
+        return super(SoftwareDeveloperModel, cls).model_validate(data)
+
 
 class UpdateSoftwareDeveloperModel(BaseModel):
+    model_config = ConfigDict(json_schema_extra={
+        "example":{
+                "full_name": "Wojciech Ignasiak",
+                "email": "wojciech_ignasiak@outlook.com",
+                "favourite_programming_language": "Python",
+                "years_of_experience": 1
+                }
+            }
+        )
     full_name: Optional[str]
     email: Optional[EmailStr]
     favourite_programming_language: Optional[str]
     years_of_experience: Optional[int]
 
-    class Config:
-        schema_extra = {
-            "example": {
+
+class CreateSoftwareDeveloperModel(BaseModel):
+    model_config = ConfigDict(json_schema_extra={
+        "example":{
                 "full_name": "Wojciech Ignasiak",
                 "email": "wojciech_ignasiak@outlook.com",
                 "favourite_programming_language": "Python",
-                "years_of_experience": 1,
+                "years_of_experience": 1
+                }
             }
-        }
+        )
+    full_name: str = Field(...)
+    email: EmailStr = Field(...)
+    favourite_programming_language: str = Field(...)
+    years_of_experience: int = Field(...)
+
 
 class SoftwareDeveloperAttributes(str, Enum):
     id = 'id'

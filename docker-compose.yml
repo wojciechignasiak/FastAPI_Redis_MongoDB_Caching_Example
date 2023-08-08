@@ -41,7 +41,7 @@ services:
 
   mongo:
     container_name: mongo
-    image: mongo:7.0.0-rc3-jammy
+    image: mongo:7.0.0-rc8-jammy
     restart: always
     ports:
       - "27017:27017"
@@ -61,7 +61,7 @@ services:
 ######################Redis - Beginning###########################
   redis:
     container_name: redis
-    image: redis:7.2-rc2-alpine
+    image: redis:7.2-rc3-alpine
     command: ["redis-server", "--save", "\"\"", "--appendonly", "no", "--requirepass", "redis"]
     ports:
       - "6379:6379"

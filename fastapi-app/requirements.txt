@@ -1,11 +1,11 @@
-fastapi>=0.96.0,<0.97.0
-uvicorn>=0.22.0,<0.23.0
-pymongo>=4.3.0,<4.4.0
-pydantic>=1.10.9,<1.11.0
+fastapi>=0.101.0,<0.102.0
+uvicorn>=0.23.0,<0.24.0
+pymongo>=4.4.0,<4.5.0
+pydantic>=2.1.0,<2.2.0
 pydantic[email]
-motor>=3.1.0,<3.2.0
+motor>=3.2.0,<3.3.0
 redis>=4.5.5,<4.6.0
 redis[hiredis]
-pytest>=7.3.2,<7.4.0
+pytest>=7.4.0,<7.5.0
 pytest-asyncio>=0.21.0,<0.22.0
 httpx>=0.24.1,<0.25.0
