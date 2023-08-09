@@ -18,6 +18,7 @@ REDIS_PASSWORD = os.environ.get("REDIS_PASSWORD")
 REDIS_HOST = os.environ.get("REDIS_HOST")
 REDIS_PORT = os.environ.get("REDIS_PORT")
 
+
 def create_application() -> FastAPI:
     application = FastAPI(openapi_url="/fastapi-app/openapi.json", docs_url="/fastapi-app/docs")
     application.include_router(create_software_developer.router, prefix="/fastapi-app", tags=["fastapi-app"])

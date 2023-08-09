@@ -14,8 +14,8 @@ async def mongo_collection():
     MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD")
     MONGO_HOST = os.environ.get("MONGO_HOST")
     MONGO_PORT = os.environ.get("MONGO_PORT")
-    MONGO_DB = os.getenv('MONGO_DB')
-    MONGO_COLLECTION = os.getenv('MONGO_COLLECTION')
+    MONGO_DB = 'test_db'
+    MONGO_COLLECTION = 'test_collection'
 
     print("Creating mongo client")
     mongo_client = AsyncIOMotorClient(

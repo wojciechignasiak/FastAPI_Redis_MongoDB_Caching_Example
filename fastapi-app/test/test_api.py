@@ -1,4 +1,4 @@
-from app.models.software_developer import SoftwareDeveloperModel, UpdateSoftwareDeveloperModel, SoftwareDeveloperAttributes, CreateSoftwareDeveloperModel
+from app.models.software_developer import UpdateSoftwareDeveloperModel, SoftwareDeveloperAttributes, CreateSoftwareDeveloperModel
 from fastapi.encoders import jsonable_encoder
 
 
@@ -12,6 +12,16 @@ def test_create_software_developer(test_app):
     assert response.status_code == 200
     response = response.json()
     assert response[SoftwareDeveloperAttributes.id] is not None
+
+    software_developer_id = response[SoftwareDeveloperAttributes.id]
+    parameters = {"software_developer_id": software_developer_id}
+    response = test_app.delete(f"/fastapi-app/delete-software-developer",
+                            params=parameters)
+    assert response.status_code == 200
+
+    parameters = {"software_developer_id": software_developer_id}
+    response = test_app.get(f"/fastapi-app/get-software-developer", params=parameters)
+    assert response.status_code == 404
 
 
 def test_get_software_developer(test_app):
@@ -30,6 +40,16 @@ def test_get_software_developer(test_app):
 
     response = response.json()
     assert response[SoftwareDeveloperAttributes.id] is not None
+
+    software_developer_id = response[SoftwareDeveloperAttributes.id]
+    parameters = {"software_developer_id": software_developer_id}
+    response = test_app.delete(f"/fastapi-app/delete-software-developer",
+                            params=parameters)
+    assert response.status_code == 200
+
+    parameters = {"software_developer_id": software_developer_id}
+    response = test_app.get(f"/fastapi-app/get-software-developer", params=parameters)
+    assert response.status_code == 404
 
 
 
@@ -69,6 +89,16 @@ def test_update_software_developer(test_app):
     assert response[SoftwareDeveloperAttributes.email] == "wojciech_ignasiak@gmail.com"
     assert response[SoftwareDeveloperAttributes.favourite_programming_language] == "Golang"
 
+    software_developer_id = response[SoftwareDeveloperAttributes.id]
+    parameters = {"software_developer_id": software_developer_id}
+    response = test_app.delete(f"/fastapi-app/delete-software-developer",
+                            params=parameters)
+    assert response.status_code == 200
+
+    parameters = {"software_developer_id": software_developer_id}
+    response = test_app.get(f"/fastapi-app/get-software-developer", params=parameters)
+    assert response.status_code == 404
+
 
 def test_delete_software_developer(test_app):
     software_developer = CreateSoftwareDeveloperModel(full_name="Wojciech Ignasiak",
@@ -83,7 +113,7 @@ def test_delete_software_developer(test_app):
     
     software_developer_id = response[SoftwareDeveloperAttributes.id]
 
-    parameters = {"software_developer_id": response[SoftwareDeveloperAttributes.id]}
+    parameters = {"software_developer_id": software_developer_id}
     response = test_app.delete(f"/fastapi-app/delete-software-developer",
                             params=parameters)
     assert response.status_code == 200
