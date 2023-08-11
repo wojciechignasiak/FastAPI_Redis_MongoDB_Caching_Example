@@ -11,7 +11,7 @@ from bson.objectid import ObjectId
 class SoftwareDeveloperQueryManager:
 
     def __init__(self, mongo_collection: AsyncIOMotorCollection):
-        self.mongo_collection = mongo_collection
+        self.mongo_collection: AsyncIOMotorCollection = mongo_collection
 
     async def create(self, software_developer: CreateSoftwareDeveloperModel) -> SoftwareDeveloperModel:
         try:
