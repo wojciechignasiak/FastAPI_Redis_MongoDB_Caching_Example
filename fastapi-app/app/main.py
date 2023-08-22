@@ -4,12 +4,7 @@ import asyncio
 import motor.motor_asyncio
 from pymongo.errors import ConnectionFailure
 import redis
-from app.routers import (
-    create_software_developer,
-    delete_software_developer,
-    update_software_developer,
-    get_software_developer
-)
+from app.routers import software_developer_router
 MONGO_USERNAME = os.environ.get("MONGO_USERNAME")
 MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD")
 MONGO_HOST = os.environ.get("MONGO_HOST")
@@ -21,10 +16,7 @@ REDIS_PORT = os.environ.get("REDIS_PORT")
 
 def create_application() -> FastAPI:
     application = FastAPI(openapi_url="/fastapi-app/openapi.json", docs_url="/fastapi-app/docs")
-    application.include_router(create_software_developer.router, prefix="/fastapi-app", tags=["fastapi-app"])
-    application.include_router(delete_software_developer.router, prefix="/fastapi-app", tags=["fastapi-app"])
-    application.include_router(update_software_developer.router, prefix="/fastapi-app", tags=["fastapi-app"])
-    application.include_router(get_software_developer.router, prefix="/fastapi-app", tags=["fastapi-app"])
+    application.include_router(software_developer_router.router, prefix="/fastapi-app", tags=["fastapi-app"])
     return application
 
 app = create_application()

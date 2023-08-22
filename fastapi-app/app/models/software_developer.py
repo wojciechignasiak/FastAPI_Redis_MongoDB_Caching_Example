@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, EmailStr, ConfigDict
+from pydantic import BaseModel, EmailStr, ConfigDict
 from typing import Any, Optional
 from enum import Enum
 
@@ -15,11 +15,11 @@ class SoftwareDeveloperModel(BaseModel):
             }
         )
     
-    id: str = Field(...)
-    full_name: str = Field(...)
-    email: EmailStr = Field(...)
-    favourite_programming_language: str = Field(...)
-    years_of_experience: int = Field(...)
+    id: str
+    full_name: str
+    email: EmailStr 
+    favourite_programming_language: str 
+    years_of_experience: int 
 
     @classmethod
     def model_validate(cls, data: dict) -> "SoftwareDeveloperModel":
@@ -38,10 +38,16 @@ class UpdateSoftwareDeveloperModel(BaseModel):
                 }
             }
         )
-    full_name: Optional[str]
-    email: Optional[EmailStr]
-    favourite_programming_language: Optional[str]
-    years_of_experience: Optional[int]
+    full_name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    favourite_programming_language: Optional[str] = None
+    years_of_experience: Optional[int] = None
+
+    def remove_none_values_and_transform_to_dict(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
+
+        result = super().model_dump(*args, **kwargs)
+
+        return {k: v for k, v in result.items() if v is not None}
 
 
 class CreateSoftwareDeveloperModel(BaseModel):
@@ -54,10 +60,10 @@ class CreateSoftwareDeveloperModel(BaseModel):
                 }
             }
         )
-    full_name: str = Field(...)
-    email: EmailStr = Field(...)
-    favourite_programming_language: str = Field(...)
-    years_of_experience: int = Field(...)
+    full_name: str 
+    email: EmailStr 
+    favourite_programming_language: str
+    years_of_experience: int
 
 
 class SoftwareDeveloperAttributes(str, Enum):

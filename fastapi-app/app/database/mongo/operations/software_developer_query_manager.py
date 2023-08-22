@@ -2,7 +2,7 @@ from app.models.software_developer import (
     CreateSoftwareDeveloperModel, SoftwareDeveloperModel, 
     SoftwareDeveloperAttributes, UpdateSoftwareDeveloperModel
 )
-from app.databases.mongo.exceptions.mongo_exceptions import (DatabaseError, NotFoundError)
+from app.database.mongo.exceptions.mongo_exceptions import (MongoDatabaseError, MongoNotFoundError)
 from motor.motor_asyncio import AsyncIOMotorCollection
 from pymongo.results import InsertOneResult, DeleteResult
 from pymongo import ReturnDocument
@@ -21,8 +21,8 @@ class SoftwareDeveloperQueryManager:
             new_software_developer.update(software_developer)
             software_developer: SoftwareDeveloperModel = SoftwareDeveloperModel.model_validate(new_software_developer)
             return software_developer
-        except DatabaseError as e:
-            raise DatabaseError(f"create_software_developer: Error: {e}")
+        except MongoDatabaseError as e:
+            raise MongoDatabaseError(f"SoftwareDeveloperQueryManager.create() error: {e}")
 
     async def delete(self, software_developer_id: str) -> bool:
         try:
@@ -30,27 +30,36 @@ class SoftwareDeveloperQueryManager:
             if result.deleted_count == 1:
                 return True
             else:
-                raise NotFoundError(f"get_software_developer: Error: Software developer with id {software_developer_id} not found")
-        except DatabaseError as e:
-            raise DatabaseError(f"delete_software_developer: Error: {e}")
+                raise MongoNotFoundError(f"SoftwareDeveloperQueryManager.delete() error: Software developer with id {software_developer_id} not found")
+        except MongoNotFoundError as e:
+            raise MongoNotFoundError(e)
+        except MongoDatabaseError as e:
+            raise MongoDatabaseError(f"SoftwareDeveloperQueryManager.delete() error: {e}")
 
     async def get(self, software_developer_id: str) -> SoftwareDeveloperModel:
         try:
             software_developer: dict = await self.mongo_collection.find_one({SoftwareDeveloperAttributes.mongo_id: ObjectId(software_developer_id)})
             if software_developer is None:
-                raise NotFoundError(f"get_software_developer: Error: Software developer with id {software_developer_id} not found")
+                raise MongoNotFoundError(f"SoftwareDeveloperQueryManager.get() error: Software developer with id {software_developer_id} not found")
             else:
                 return SoftwareDeveloperModel.model_validate(software_developer)
-        except DatabaseError as e:
-            raise DatabaseError(f"get_software_developer: Error: {e}")
+        except MongoNotFoundError as e:
+            raise MongoNotFoundError(e)
+        except MongoDatabaseError as e:
+            raise MongoDatabaseError(f"SoftwareDeveloperQueryManager.get() error: {e}")
+        
 
     async def update(self, software_developer_id: str, update_software_developer: UpdateSoftwareDeveloperModel) -> SoftwareDeveloperModel:
         try:
             updated_software_developer: dict = await self.mongo_collection.find_one_and_update(
                 {SoftwareDeveloperAttributes.mongo_id: ObjectId(software_developer_id)}, 
-                {"$set": update_software_developer.model_dump()},
+                {"$set": update_software_developer.remove_none_values_and_transform_to_dict()},
                 return_document=ReturnDocument.AFTER
             )
+            if updated_software_developer is None:
+                raise MongoNotFoundError(f"SoftwareDeveloperQueryManager.update() error: Software developer with id {software_developer_id} not found")
             return SoftwareDeveloperModel.model_validate(updated_software_developer)
-        except DatabaseError as e:
-            raise DatabaseError(f"update_software_developer: Error: {e}")
+        except MongoNotFoundError as e:
+            raise MongoNotFoundError(e)
+        except MongoDatabaseError as e:
+            raise MongoDatabaseError(f"SoftwareDeveloperQueryManager.update() error: {e}")
