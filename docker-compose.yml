@@ -1,5 +1,3 @@
-version: '3'
-
 networks:
   backend-network:
     name: backend-network
@@ -21,7 +19,6 @@ services:
       - MONGO_USERNAME=${MONGO_USERNAME}
       - MONGO_HOST=${MONGO_HOST}
       - MONGO_PORT=${MONGO_PORT}
-      - MONGO_COLLECTION=${MONGO_COLLECTION}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
@@ -41,7 +38,7 @@ services:
 
   mongo:
     container_name: mongo
-    image: mongo:7.0.0-rc8-jammy
+    image: mongo:7.0.9
     restart: always
     ports:
       - "27017:27017"
@@ -61,7 +58,7 @@ services:
 ######################Redis - Beginning###########################
   redis:
     container_name: redis
-    image: redis:7.2-rc3-alpine
+    image: redis:7.2.4
     command: ["redis-server", "--save", "\"\"", "--appendonly", "no", "--requirepass", "redis"]
     ports:
       - "6379:6379"

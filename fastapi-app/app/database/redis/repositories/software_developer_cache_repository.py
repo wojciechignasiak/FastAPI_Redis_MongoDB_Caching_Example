@@ -1,13 +1,11 @@
-from redis import Redis
+from app.database.redis.repositories.base_redis_repository import BaseRedisRepository
+from app.database.redis.repositories.software_developer_cache_repository_abc import SoftwareDeveloperCacheRepositoryABC
 from app.models.software_developer import SoftwareDeveloperAttributes, SoftwareDeveloperModel
 from app.database.redis.exceptions.redis_exceptions import RedisDatabaseError
 import json
 
 
-class SoftwareDeveloperCacheManager:
-
-    def __init__(self, redis_client: Redis):
-        self.redis_client: Redis = redis_client
+class SoftwareDeveloperCacheRepository(BaseRedisRepository, SoftwareDeveloperCacheRepositoryABC):
 
     async def create_or_update(self, created_or_updated_software_developer: SoftwareDeveloperModel) -> bool:
         try:
@@ -17,9 +15,9 @@ class SoftwareDeveloperCacheManager:
             else:
                 return False
         except RedisDatabaseError as e:
-            raise RedisDatabaseError(f"SoftwareDeveloperCacheManager.create_or_update() error: {e}")
+            raise RedisDatabaseError(f"SoftwareDeveloperCacheRepository.create_or_update() error: {e}")
 
-    async def get(self, software_developer_id: str):
+    async def get(self, software_developer_id: str) -> dict|None:
         try:
             software_developer: bytes = self.redis_client.get(f"{SoftwareDeveloperAttributes.software_developer.value}:"f"{software_developer_id}")
             if software_developer is not None:
@@ -28,10 +26,10 @@ class SoftwareDeveloperCacheManager:
             else:
                 return None
         except RedisDatabaseError as e:
-            raise RedisDatabaseError(f"SoftwareDeveloperCacheManager.get() error: {e}")
+            raise RedisDatabaseError(f"SoftwareDeveloperCacheRepository.get() error: {e}")
     
     async def delete(self, software_developer_id: str):
         try:
             self.redis_client.delete(f"{SoftwareDeveloperAttributes.software_developer.value}:"f"{software_developer_id}")
         except RedisDatabaseError as e:
-            raise RedisDatabaseError(f"SoftwareDeveloperCacheManager.delete() error: {e}")
+            raise RedisDatabaseError(f"SoftwareDeveloperCacheRepository.delete() error: {e}")

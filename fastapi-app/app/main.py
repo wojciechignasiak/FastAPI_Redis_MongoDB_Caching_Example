@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 import os
 import asyncio
-import motor.motor_asyncio
+from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo.errors import ConnectionFailure
-import redis
+from contextlib import asynccontextmanager
+from redis import Redis
 from app.routers import software_developer_router
+
+
 MONGO_USERNAME = os.environ.get("MONGO_USERNAME")
 MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD")
 MONGO_HOST = os.environ.get("MONGO_HOST")
@@ -14,18 +17,13 @@ REDIS_HOST = os.environ.get("REDIS_HOST")
 REDIS_PORT = os.environ.get("REDIS_PORT")
 
 
-def create_application() -> FastAPI:
-    application = FastAPI(openapi_url="/fastapi-app/openapi.json", docs_url="/fastapi-app/docs")
-    application.include_router(software_developer_router.router, prefix="/fastapi-app", tags=["fastapi-app"])
-    return application
-
-app = create_application()
-
-
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    ''' Run at startup
+        Initialise databases clients.
+    '''
     print("Starting fastapi-app app...")
-    app.state.mongo_client = motor.motor_asyncio.AsyncIOMotorClient(
+    app.state.mongo_client = AsyncIOMotorClient(
         f"mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}"
         )
     
@@ -42,7 +40,7 @@ async def startup_event():
         except ConnectionFailure:
             await asyncio.sleep(3)
 
-    app.state.redis_client: redis.Redis = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
+    app.state.redis_client = Redis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
     while True:
         try:
             print("Testing connection to Redis...")
@@ -56,8 +54,17 @@ async def startup_event():
         except ConnectionError:
             await asyncio.sleep(3)
 
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    print("Shutting fastapi-app app down...")
+    yield
+    ''' Run on shutdown
+        Close the connection
+        Clear variables and release the resources
+    '''
+    print("Closing MongoDB Client...")
     app.state.mongo_client.close()
+
+def create_application() -> FastAPI:
+    application = FastAPI(lifespan=lifespan, openapi_url="/fastapi-app/openapi.json", docs_url="/fastapi-app/docs")
+    application.include_router(software_developer_router.router, prefix="/fastapi-app", tags=["fastapi-app"])
+    return application
+
+app = create_application()
